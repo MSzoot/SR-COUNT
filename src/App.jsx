@@ -9,11 +9,16 @@ function App() {
   const [newNickname, setNewNickname] = useState("");
   const [newRank, setNewRank] = useState("");
   const [deleteUserId, setDeleteUserId] = useState(null);
+  const [notes, setNotes] = useState({});
 
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users"));
     if (storedUsers) {
       setUsers(storedUsers);
+    }
+    const storedNotes = JSON.parse(localStorage.getItem("notes"));
+    if (storedNotes) {
+      setNotes(storedNotes);
     }
   }, []);
 
@@ -68,6 +73,12 @@ function App() {
       const updatedUsers = [...users, newUser];
       setUsers(updatedUsers);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+      // Add notes for the new user
+      const updatedNotes = { ...notes, [newUser.id]: "" };
+      setNotes(updatedNotes);
+      localStorage.setItem("notes", JSON.stringify(updatedNotes));
+
       setNewNickname("");
       setNewRank("");
     }
@@ -80,6 +91,13 @@ function App() {
         const updatedUsers = users.filter((user) => user.id !== deleteUserId);
         setUsers(updatedUsers);
         localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+        // Remove notes for the deleted user
+        const updatedNotes = { ...notes };
+        delete updatedNotes[deleteUserId];
+        setNotes(updatedNotes);
+        localStorage.setItem("notes", JSON.stringify(updatedNotes));
+
         setDeleteUserId(null);
       }
     }
@@ -87,7 +105,19 @@ function App() {
 
   const resetLocalStorage = () => {
     localStorage.removeItem("users");
+    localStorage.removeItem("notes");
     setUsers([]);
+    setNotes({});
+  };
+
+  const editNotes = (userId) => {
+    const updatedNotes = { ...notes };
+    const newNote = prompt("Edit notes:", updatedNotes[userId]);
+    if (newNote !== null) {
+      updatedNotes[userId] = newNote;
+      setNotes(updatedNotes);
+      localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    }
   };
 
   return (
@@ -102,37 +132,47 @@ function App() {
                 <th>Ranga</th>
                 <th>SR+</th>
                 <th>Akcja</th>
-                <th>Otrzymane itemy</th>
+                <th>Itemy</th>
+                <th className="px-4">Notatki</th>
               </tr>
             </thead>
           )}
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td className="px-6">{user.nickname}</td>
-                <td className="px-6">{user.rank}</td>
-                <td className="px-6">{user.points}</td>
+                <td className="px-4">{user.nickname}</td>
+                <td className="px-4">{user.rank}</td>
+                <td className="px-4">{user.points}</td>
                 <td>
                   <button
-                    className="btn text-2xl hover:btn-success"
+                    className="btn btn-sm text-lg hover:btn-success"
                     onClick={() => addPoints(user.id, 1)}
                   >
                     +
                   </button>
                   <button
-                    className="btn text-2xl hover:btn-error"
+                    className="btn btn-sm text-lg hover:btn-error"
                     onClick={() => addPoints(user.id, -1)}
                   >
                     -
                   </button>
                 </td>
                 <td className="text-center">{user.clicks || 0}</td>
-                <button
-                  className="btn btn ml-20 hover:btn-error"
-                  onClick={() => setDeleteUserId(user.id)}
-                >
-                  🗑️
-                </button>
+                <td className="text-center">{notes[user.id] || ""}</td>
+                <td>
+                  <button
+                    className="btn btn-sm ml-10 text-lg hover:btn-primary"
+                    onClick={() => editNotes(user.id)}
+                  >
+                    🗒️
+                  </button>
+                  <button
+                    className="btn btn-sm hover:btn-error"
+                    onClick={() => setDeleteUserId(user.id)}
+                  >
+                    🗑️
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
