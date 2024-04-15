@@ -123,7 +123,7 @@ function App() {
   return (
     <div>
       <h1 className="mx-auto mb-20 p-6 text-center text-4xl">
-        Purpurowa KomitywaSR+ Tracker
+        Purpurowa Komitywa SR+ Tracker
       </h1>
       <div className="flex justify-center">
         <table>
