@@ -122,7 +122,9 @@ function App() {
 
   return (
     <div>
-      <h1 className="mx-auto mb-20 p-6 text-center text-4xl">SR+ Tracker</h1>
+      <h1 className="mx-auto mb-20 p-6 text-center text-4xl">
+        Purpurowa KomitywaSR+ Tracker
+      </h1>
       <div className="flex justify-center">
         <table>
           {users.length > 0 && (
@@ -131,7 +133,7 @@ function App() {
                 <th>Nick</th>
                 <th>Ranga</th>
                 <th>SR+</th>
-                <th>Akcja</th>
+                <th>Loot</th>
                 <th>Itemy</th>
                 <th className="px-4">Notatki</th>
               </tr>
