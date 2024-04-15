@@ -178,7 +178,7 @@ function App() {
           </tbody>
         </table>
       </div>
-      <div className="mt-20 flex justify-center">
+      <div className="mt-20 flex justify-center border-t-2 border-base-300 pt-10">
         <input
           type="text"
           placeholder="Nick"
